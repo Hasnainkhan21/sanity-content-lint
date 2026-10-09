@@ -2,24 +2,37 @@
 
 import "dotenv/config";
 import { client } from "./sanity/client.js";
-import { DOCUMENT_COUNT_QUERY } from "./sanity/queries.js";
+import { DOCUMENTS_QUERY } from "./sanity/queries.js";
+import { config } from "./config.js";
+import { checkMissingSlug } from "./rules/content/missingSlug.js";
 
 async function main() {
   console.log("\nSanity Content Lint");
   console.log("-------------------");
-  console.log("Connecting to Sanity...\n");
+  console.log("Analyzing content...\n");
 
   try {
-    const documentCount = await client.fetch<number>(
-      DOCUMENT_COUNT_QUERY
+    const documents = await client.fetch(DOCUMENTS_QUERY);
+
+    const issues = checkMissingSlug(
+      documents,
+      config.rules.missingSlug
     );
 
-    console.log("Connection successful!");
-    console.log(`Project ID: ${process.env.SANITY_PROJECT_ID}`);
-    console.log(`Dataset: ${process.env.SANITY_DATASET}`);
-    console.log(`Documents found: ${documentCount}`);
+    console.log(`Documents analyzed: ${documents.length}`);
+    console.log(`Missing slug issues: ${issues.length}\n`);
+
+    for (const issue of issues) {
+      console.log(`WARNING ${issue.ruleId}: ${issue.message}`);
+      console.log(`  ID: ${issue.documentId}`);
+      console.log(`  Type: ${issue.documentType}\n`);
+    }
+
+    if (issues.length === 0) {
+      console.log("No missing slug issues found.");
+    }
   } catch (error) {
-    console.error("Could not query Sanity.");
+    console.error("Analysis failed.");
 
     if (error instanceof Error) {
       console.error(error.message);
