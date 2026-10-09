@@ -1,4 +1,18 @@
 
+/**
+ * Rule C003 – Missing Slug
+ *
+ * Reports documents whose `slug.current` field is absent,
+ * empty, or contains only whitespace.
+ */
+
+// Import shared types from the central types file.
+// We also re-export them so any code that was already importing
+// LintIssue / LintSeverity from this file continues to work.
+import type { LintSeverity, LintIssue } from "../types.js";
+export type { LintSeverity, LintIssue };
+
+/** Shape of each document returned by the GROQ query. */
 export interface MissingSlugDocument {
   _id: string;
   _type: string;
@@ -8,23 +22,17 @@ export interface MissingSlugDocument {
   };
 }
 
+/** Options accepted by checkMissingSlug. */
 export interface MissingSlugOptions {
   documentTypes: string[];
   severity: LintSeverity;
 }
 
-export type LintSeverity = "error" | "warning" | "info";
-
-export interface LintIssue {
-  ruleId: string;
-  severity: LintSeverity;
-  category: string;
-  message: string;
-  documentId?: string;
-  documentType?: string;
-  documentTitle?: string;
-}
-
+/**
+ * Check a list of documents for missing / blank slugs.
+ * Only documents whose `_type` is listed in `options.documentTypes`
+ * are inspected; all others are silently skipped.
+ */
 export function checkMissingSlug(
   documents: MissingSlugDocument[],
   options: MissingSlugOptions
