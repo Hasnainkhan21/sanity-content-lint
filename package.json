@@ -1,0 +1,26 @@
+{
+  "name": "sanity-content-lint",
+  "version": "0.1.0",
+  "description": "ESLint for Sanity content architecture and content quality",
+  "type": "module",
+  "bin": {
+    "sanity-content-lint": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "keywords": [
+    "sanity",
+    "sanity-cms",
+    "content",
+    "lint",
+    "cms"
+  ],
+  "author": "Muhammad Hasnain",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^5.0.0"
+  }
+}
