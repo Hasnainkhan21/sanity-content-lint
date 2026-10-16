@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "description": "ESLint for Sanity content architecture and content quality",
   "type": "module",
+  "files": [
+    "dist"
+  ],
   "bin": {
     "sanity-content-lint": "./dist/index.js"
   },
@@ -20,6 +23,14 @@
   ],
   "author": "Muhammad Hasnain",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Hasnainkhan21/sanity-content-lint.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Hasnainkhan21/sanity-content-lint/issues"
+  },
+  "homepage": "https://github.com/Hasnainkhan21/sanity-content-lint#readme",
   "devDependencies": {
     "@types/node": "^24.0.0",
     "typescript": "^5.0.0",

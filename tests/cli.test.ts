@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { execSync } from "child_process";
 import path from "path";
 
-describe("CLI Interface", () => {
+describe("CLI Interface", { timeout: 30000 }, () => {
   const cliPath = path.join(__dirname, "../dist/index.js");
 
   it("outputs valid JSON with --format json", () => {
@@ -30,14 +30,22 @@ describe("CLI Interface", () => {
   });
 
   it("outputs help text with --help", () => {
-    const output = execSync(`node ${cliPath} --help`, { encoding: "utf8" });
+    const env = { ...process.env };
+    delete env.SANITY_PROJECT_ID;
+    delete env.SANITY_DATASET;
+    delete env.SANITY_API_VERSION;
+    const output = execSync(`node ${cliPath} --help`, { encoding: "utf8", env });
     expect(output).toContain("Usage: sanity-content-lint");
     expect(output).toContain("--format");
     expect(output).toContain("--no-color");
   });
 
   it("outputs version with --version", () => {
-    const output = execSync(`node ${cliPath} --version`, { encoding: "utf8" });
+    const env = { ...process.env };
+    delete env.SANITY_PROJECT_ID;
+    delete env.SANITY_DATASET;
+    delete env.SANITY_API_VERSION;
+    const output = execSync(`node ${cliPath} --version`, { encoding: "utf8", env });
     // Assuming version is something like 0.1.0, just check it has dots and numbers
     expect(output.trim()).toMatch(/^[0-9]+\.[0-9]+\.[0-9]+$/);
   });

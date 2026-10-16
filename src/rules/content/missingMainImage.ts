@@ -33,6 +33,52 @@ function getNestedValue(obj: any, path: string): any {
   return current;
 }
 
+/**
+ * Checks whether an image value contains a valid Sanity image asset.
+ * A valid Sanity image must be an object containing a non-empty asset reference.
+ */
+function hasValidImageAsset(value: any): boolean {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    return false;
+  }
+
+  // An empty object has no image data
+  if (Object.keys(value).length === 0) {
+    return false;
+  }
+
+  // Direct reference to an asset: { _ref: "image-..." }
+  if (typeof value._ref === "string" && value._ref.trim().length > 0) {
+    return true;
+  }
+
+  const asset = value.asset;
+  if (!asset) {
+    return false;
+  }
+
+  // Asset as string ID or reference
+  if (typeof asset === "string") {
+    return asset.trim().length > 0;
+  }
+
+  // Asset as reference object or dereferenced object
+  if (typeof asset === "object" && !Array.isArray(asset)) {
+    if (typeof asset._ref === "string") {
+      return asset._ref.trim().length > 0;
+    }
+    if (typeof asset._id === "string") {
+      return asset._id.trim().length > 0;
+    }
+    if (typeof asset.url === "string") {
+      return asset.url.trim().length > 0;
+    }
+    return Object.keys(asset).length > 0 && asset._ref !== "";
+  }
+
+  return false;
+}
+
 export function checkMissingMainImage(
   documents: MissingMainImageDocument[],
   options: MissingMainImageOptions
@@ -45,9 +91,7 @@ export function checkMissingMainImage(
     }
 
     const value = getNestedValue(document, options.fieldPath);
-    
-    // Check if missing, null, or empty object. A valid Sanity image has an 'asset' object.
-    const isMissing = !value || typeof value !== 'object' || !value.asset;
+    const isMissing = !hasValidImageAsset(value);
 
     if (isMissing) {
       issues.push({

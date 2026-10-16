@@ -16,7 +16,7 @@ export const client = createClient({
   dataset,
   apiVersion,
   useCdn: false,
-  ...(process.env.SANITY_TOKEN
-    ? { token: process.env.SANITY_TOKEN }
+  ...((process.env.SANITY_API_TOKEN || process.env.SANITY_TOKEN)
+    ? { token: (process.env.SANITY_API_TOKEN || process.env.SANITY_TOKEN) }
     : {}),
 });

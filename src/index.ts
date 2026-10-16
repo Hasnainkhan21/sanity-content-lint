@@ -10,7 +10,6 @@
  */
 
 import "dotenv/config";
-import { client } from "./sanity/client.js";
 import { DOCUMENTS_QUERY } from "./sanity/queries.js";
 import { checkMissingTitle } from "./rules/content/missingTitle.js";
 import { checkMissingSeoDescription } from "./rules/content/missingSeoDescription.js";
@@ -95,6 +94,7 @@ async function main() {
 
   try {
     const config = loadConfig();
+    const { client } = await import("./sanity/client.js");
     const documents = await client.fetch(DOCUMENTS_QUERY);
 
     // ── Run all rules ────────────────────────────────────────────────────────
