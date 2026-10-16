@@ -7,7 +7,7 @@
     "dist"
   ],
   "bin": {
-    "sanity-content-lint": "./dist/index.js"
+    "sanity-content-lint": "dist/index.js"
   },
   "scripts": {
     "build": "tsc",
@@ -25,7 +25,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Hasnainkhan21/sanity-content-lint.git"
+    "url": "git+https://github.com/Hasnainkhan21/sanity-content-lint.git"
   },
   "bugs": {
     "url": "https://github.com/Hasnainkhan21/sanity-content-lint/issues"
